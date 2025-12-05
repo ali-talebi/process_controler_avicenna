@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card shadow-sm p-3">
+    <h4>آیا مطمئن هستید که می‌خواهید این فرایند را حذف کنید؟</h4>
+    <p><strong>{{ instance }}</strong></p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">حذف</button>
+        {% comment %} <a href="{% url 'project:project_detail' instance.process_of_work.name_project.id %}" class="btn btn-secondary">انصراف</a> {% endcomment %}
+    </form>
+</div>
+{% endblock %}

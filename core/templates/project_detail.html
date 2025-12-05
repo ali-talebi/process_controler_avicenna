@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>{{project.name_project}} </h2>
+<p class="text-muted">{{ project.description }}</p>
+
+<hr>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>فرایندها</h4>
+    <a href="{% url 'process:create_process' project.id %}" class="btn btn-success">+ فرایند جدید</a>
+    
+</div>
+
+{% for process in project.processes.all %}
+<div class="card mb-3 shadow-sm">
+    <div class="card-body">
+        <h5>{{ process.name_process }}</h5>
+        <a href="{% url 'process:delete_process' process.id %}" class="btn btn-success">- حذف فرایند</a>
+        <p>
+            ایجاد کننده فرایند: <h6>{{ process.creator }}</h6>
+        </p>
+        <a href="{% url 'process:create_executer' project.id process.id %}" class="btn btn-sm btn-primary mt-2">+ کار جدید</a>
+
+        <ul class="list-group mt-3">
+            {% for execute in process.executes.all %}
+            <li class="list-group-item d-flex justify-content-between">
+                <span>
+                    {{ execute.name_of_work }}
+                    
+                </span>
+                <div>
+                    <a href="{% url 'process:delete_executer'  execute.id  %}" class="btn btn-sm btn-outline-secondary"> حذف فعالیت    </a>
+                    <a href="#" class="btn btn-sm btn-outline-secondary"> انجام دهنده فعالیت :{{execute.worker_of_work}} </a>
+                    <a href="{% url 'process:update_exec' execute.id %}" class="btn btn-sm btn-outline-secondary">تغییر وضعیت</a>
+                    <a href="#" class="btn btn-sm btn-outline-secondary">
+                        {{execute.result_work_summary}} 
+                    </a>
+                </div>
+
+
+            </li>
+            {% empty %}
+            <li class="list-group-item">هیچ کاری ثبت نشده.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

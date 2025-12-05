@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h3 class="mb-3">افزودن کار جدید برای فرایند: {{ process.title }}</h3>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">عنوان کار</label>
+                {{ form.as_p }}
+            </div>
+
+            <div class="form-check mb-3">
+                {{ form.is_done }}
+                <label class="form-check-label ms-2">این کار انجام شده است؟</label>
+            </div>
+
+            <button type="submit" class="btn btn-success">ثبت کار</button>
+            {% comment %} <a href="{% url 'project_detail' process.project.id %}" class="btn btn-secondary">بازگشت</a> {% endcomment %}
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

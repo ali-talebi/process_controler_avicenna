@@ -6,9 +6,16 @@ from project.models import Detail_Project
 
 class Execute_Process(models.Model):
     
+    SUMMARY_LEVEL = (
+        ('idea', 'در حل ایده'),
+        ('starting', 'در حال شروع'),
+        ('checking','در حال بررسی'),
+        ('done','اتمام')
+    )
+    
     worker_of_work = models.ForeignKey(Member,verbose_name="انجام دهنده فعالیت در این فرایند ",on_delete=models.PROTECT)
     name_of_work = models.CharField(verbose_name="نام عمل اقدام شده" , max_length=100)
-    process_of_work = models.ForeignKey('Detail_Process',verbose_name="فرایند مرجع",on_delete=models.PROTECT)
+    process_of_work = models.ForeignKey('Detail_Process',verbose_name="فرایند مرجع",on_delete=models.PROTECT,related_name="executes")
     description_work = models.TextField(verbose_name="متن توضیحات")
     document1_work = models.FileField(verbose_name="سند3 ایجاد شده در این بخش اجرایی" , null=True,blank=True)
     document2_work = models.FileField(verbose_name="سند2 ایجاد شده در این بخش اجرایی" , null=True,blank=True)
@@ -16,6 +23,7 @@ class Execute_Process(models.Model):
     time_created = models.DateTimeField(verbose_name="زمان ایجاد اقدام",auto_now_add=True)
     time_update  = models.DateTimeField(verbose_name="به روزرسانی  زمان اقدام" , auto_now=True) 
     result_work = models.TextField(verbose_name="نتیجه این عمل صورت گرفته" )
+    result_work_summary = models.CharField(verbose_name="خلاصه تک کلمه ای",max_length=20,choices=SUMMARY_LEVEL,default='idea',null=True)
     
     
     def __str__(self):
@@ -30,8 +38,8 @@ class Execute_Process(models.Model):
 
 class Detail_Process(models.Model):
     
-    name_project = models.ForeignKey(Detail_Project,verbose_name="پروژه مرجع",on_delete=models.PROTECT,null=True)
-    name_process = models.CharField(verbose_name="نام فعالیت", max_length=100)
+    name_project = models.ForeignKey(Detail_Project,verbose_name="پروژه مرجع",on_delete=models.PROTECT,null=True,related_name="processes")
+    name_process = models.CharField(verbose_name="نام فرایند", max_length=100)
     creator = models.ForeignKey(Member,verbose_name="ایجاد کننده فعالیت",on_delete=models.PROTECT)
     time_created = models.DateTimeField(verbose_name="زمان ایجاد فعالیت",auto_now_add=True)
     time_update  = models.DateTimeField(verbose_name="به روزرسانی فرایند" , auto_now=True) 
